@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<script type="text/javascript" src="jquery-1.6.2.min.js"></script>
+		<title>Test Clicking</title>
+		<link type="text/css" href="reset.css" rel="stylesheet">
+		<link type="text/css" href="button.css" rel="stylesheet">
+		<link type="text/css" href="writepub.css" rel="stylesheet">
+	</head>
+	<body>
+		They should be clicked: 
+		<span id="count">0</span> times
+		<br/>
+		<br/>
+
+		<a id="anchor" class="gray_button" href="#" onclick="increment(this);return false;">Clicked 0 times</a><br/>
+		<span id="span" class="green_button" onclick="increment(this);">Clicked 0 times</span><br/>
+		<div id="div" class="green_button" onclick="increment(this);">Clicked 0 times</div><br/>
+		<button id="button" class="green_button" onclick="increment(this);">Clicked 0 times</button><br/>
+		<input id="input" class="orange_button" type="button" onclick="increment(this);" value="Clicked 0 times"><br/>
+		
+		<script type="text/javascript">
+			
+			function increment(sender) {
+				var content = get_content(sender);
+				
+				var result = content.match(/Clicked ([0-9]+) times/);
+				
+				if (result == null) {
+					content = "Clicked 0 times";
+				} else {
+					var count = parseInt(result[1]);
+					content = "Clicked " + (++count) + " times";
+				}
+				
+				set_content(sender, content);
+			}
+			
+			
+			function get_content(obj) {
+				if (obj.tagName.toLowerCase() == "input") {
+					return $(obj).val();
+				} else {
+					return $(obj).html();
+				}
+			}
+			
+			function set_content(obj, content) {
+				if (obj.tagName.toLowerCase() == "input") {
+					$(obj).val(content);
+				} else {
+					$(obj).html(content);
+				}
+			}
+		</script>
+	</body>
+</html>
