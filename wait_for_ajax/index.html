@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+		<title>Wait for AJAX</title>
+		<script type="text/javascript" src="/jquery-1.6.2.min.js"></script>
+	</head>
+	<body>
+		<input type="button" id="fire_ajax_button_a" onclick="fire_ajax('A');" value="Fire Ajax A">
+		<input type="button" id="fire_ajax_button_b" onclick="fire_ajax('B');" value="Fire Ajax B">
+		<br/>
+		<span id="console">
+			
+		</span>
+		<script type="text/javascript">
+			
+			var console = {};
+			console.log = function(msg) {
+				$('#console').prepend(msg + "<br/>");
+			}
+			
+			var loadings = { A: false, B: false};
+			function fire_ajax(id) {
+				
+				var something_is_loading = false;
+				
+				for (var key in loadings) {
+					if (loadings[key] == true) {
+						console.log(id+" is fired while "+key+" (the previous one) is not finished. (Should not have happened)");
+						something_is_loading = true;
+					}
+				}
+				
+				if (something_is_loading == false) {
+					console.log(id+" is fired while nothing is loading. (OK)");
+				}
+				
+				loadings[id] = true;
+				$.post('/ajax', function(data) {
+				  	console.log(id+" got '"+data+"' from server");
+					loadings[id] = false;
+				});
+				
+			}
+		</script>
+	</body>
+</html>
